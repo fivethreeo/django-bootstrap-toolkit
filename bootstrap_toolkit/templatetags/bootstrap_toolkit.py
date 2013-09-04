@@ -339,7 +339,7 @@ class PushPopInclusionTag(InclusionTag):
         template = self.get_template(context, **kwargs)
         context.push()
         data = self.get_context(context, **kwargs)
-        output = render_to_string(template, data)
+        output = template.render_to_string(template, data)
         context.pop()
         return output
         
