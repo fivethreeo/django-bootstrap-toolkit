@@ -11,9 +11,14 @@ from django.template.loader import get_template
 from django import template
 from django.template import Library, Node, TemplateSyntaxError
 from django.conf import settings
+
 from django.utils.safestring import mark_safe
 from django.utils.html import escape
+from classytags.core import Options
+from classytags.arguments import Argument
+from classytags.helpers import InclusionTag
 
+register = template.Library()
 
 BOOTSTRAP_BASE_URL = getattr(settings, 'BOOTSTRAP_BASE_URL',
                              '//netdna.bootstrapcdn.com/bootstrap/3.0.0-rc1/'
@@ -324,40 +329,56 @@ def bootstrap_messages(context, *args, **kwargs):
     return get_template("bootstrap_toolkit/messages.html").render(context)
 
 
-@register.inclusion_tag("bootstrap_toolkit/form.html", takes_context=True)
-def bootstrap_form(context, form, **kwargs):
-    """
-    Render a form
-    """
-    context.push()
-    context.update(kwargs)
-    context['form'] = form
-    context.pop()
-    return context
+class PushPopInclusionTag(InclusionTag):
+    
+    def render_tag(self, context, **kwargs):
+        """
+        INTERNAL!
 
+        Gets the context and data to render.
+        """
+        template = self.get_template(context, **kwargs)
+        context.push()
+        data = self.get_context(context, **kwargs)
+        output = render_to_string(template, data)
+        context.pop()
+        return output
+        
+class BootstrapForm(PushPopInclusionTag):
+    name = 'bootstrap_form'
+    template = 'bootstrap_toolkit/form.html'
+    options = Options(
+        Argument('form'),
+    )
+    def get_context(self, context, form):
+        context['form'] = form
+        return context
 
-@register.inclusion_tag("bootstrap_toolkit/formset.html", takes_context=True)
-def bootstrap_formset(context, formset, **kwargs):
-    """
-    Render a formset
-    """
-    context.push()
-    context.update(kwargs)
-    context['formset'] = formset
-    context.pop()
-    return context
+register.tag(BootstrapForm)
 
+class BootstrapFormset(PushPopInclusionTag):
+    name = 'bootstrap_formset'
+    template = 'bootstrap_toolkit/formset.html'
+    options = Options(
+        Argument('formset'),
+    )
+    def get_context(self, context, formset):
+        context['formset'] = formset
+        return context
 
-@register.inclusion_tag("bootstrap_toolkit/field.html", takes_context=True)
-def bootstrap_field(context, field, **kwargs):
-    """
-    Render a field
-    """
-    context.push()
-    context.update(kwargs)
-    context['field'] = field
-    context.pop()
-    return context
+register.tag(BootstrapFormset)
+
+class BootstrapField(PushPopInclusionTag):
+    name = 'bootstrap_field'
+    template = 'bootstrap_toolkit/field.html'
+    options = Options(
+        Argument('field'),
+    )
+    def get_context(self, context, field):
+        context['field'] = field
+        return context
+
+register.tag(BootstrapField)
 
 
 @register.inclusion_tag("bootstrap_toolkit/button.html")
