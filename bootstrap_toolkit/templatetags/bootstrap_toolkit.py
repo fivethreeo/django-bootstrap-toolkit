@@ -324,33 +324,39 @@ def bootstrap_messages(context, *args, **kwargs):
     return get_template("bootstrap_toolkit/messages.html").render(context)
 
 
-@register.inclusion_tag("bootstrap_toolkit/form.html")
+@register.inclusion_tag("bootstrap_toolkit/form.html", takes_context=True)
 def bootstrap_form(form, **kwargs):
     """
     Render a form
     """
-    context = kwargs.copy()
+    context.push()
+    context.update(kwargs)
     context['form'] = form
+    context.pop()
     return context
 
 
-@register.inclusion_tag("bootstrap_toolkit/formset.html")
+@register.inclusion_tag("bootstrap_toolkit/formset.html", takes_context=True)
 def bootstrap_formset(formset, **kwargs):
     """
     Render a formset
     """
-    context = kwargs.copy()
+    context.push()
+    context.update(kwargs)
     context['formset'] = formset
+    context.pop()
     return context
 
 
-@register.inclusion_tag("bootstrap_toolkit/field.html")
+@register.inclusion_tag("bootstrap_toolkit/field.html", takes_context=True)
 def bootstrap_field(field, **kwargs):
     """
     Render a field
     """
-    context = kwargs.copy()
+    context.push()
+    context.update(kwargs)
     context['field'] = field
+    context.pop()
     return context
 
 
