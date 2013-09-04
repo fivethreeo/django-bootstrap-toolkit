@@ -15,7 +15,7 @@ from django.conf import settings
 from django.utils.safestring import mark_safe
 from django.utils.html import escape
 from classytags.core import Options
-from classytags.arguments import Argument
+from classytags.arguments import Argument, MultiKeywordArgument
 from classytags.helpers import InclusionTag
 
 register = template.Library()
@@ -328,7 +328,6 @@ def bootstrap_messages(context, *args, **kwargs):
     """
     return get_template("bootstrap_toolkit/messages.html").render(context)
 
-
 class PushPopInclusionTag(InclusionTag):
     
     def render_tag(self, context, **kwargs):
@@ -349,8 +348,10 @@ class BootstrapForm(PushPopInclusionTag):
     template = 'bootstrap_toolkit/form.html'
     options = Options(
         Argument('form'),
+        MultiKeywordArgument('kwargs')
     )
-    def get_context(self, context, form):
+    def get_context(self, context, form, kwargs):
+        context.update(kwargs)
         context['form'] = form
         return context
 
@@ -361,8 +362,10 @@ class BootstrapFormset(PushPopInclusionTag):
     template = 'bootstrap_toolkit/formset.html'
     options = Options(
         Argument('formset'),
+        MultiKeywordArgument('kwargs')
     )
-    def get_context(self, context, formset):
+    def get_context(self, context, form, kwargs):
+        context.update(kwargs)
         context['formset'] = formset
         return context
 
@@ -373,8 +376,10 @@ class BootstrapField(PushPopInclusionTag):
     template = 'bootstrap_toolkit/field.html'
     options = Options(
         Argument('field'),
+        MultiKeywordArgument('kwargs')
     )
-    def get_context(self, context, field):
+    def get_context(self, context, form, kwargs):
+        context.update(kwargs)
         context['field'] = field
         return context
 
