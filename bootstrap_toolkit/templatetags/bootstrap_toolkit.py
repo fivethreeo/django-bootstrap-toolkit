@@ -17,6 +17,7 @@ from django.utils.html import escape
 from classytags.core import Options
 from classytags.arguments import Argument, MultiKeywordArgument
 from classytags.helpers import InclusionTag
+from django.template.loader import render_to_string
 
 register = template.Library()
 
@@ -339,7 +340,7 @@ class PushPopInclusionTag(InclusionTag):
         template = self.get_template(context, **kwargs)
         context.push()
         data = self.get_context(context, **kwargs)
-        output = template.render_to_string(template, data)
+        output = render_to_string(template, data)
         context.pop()
         return output
         
