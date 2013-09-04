@@ -364,7 +364,7 @@ class BootstrapFormset(PushPopInclusionTag):
         Argument('formset'),
         MultiKeywordArgument('kwargs')
     )
-    def get_context(self, context, form, kwargs):
+    def get_context(self, context, formsset, kwargs):
         context.update(kwargs)
         context['formset'] = formset
         return context
@@ -378,7 +378,7 @@ class BootstrapField(PushPopInclusionTag):
         Argument('field'),
         MultiKeywordArgument('kwargs')
     )
-    def get_context(self, context, form, kwargs):
+    def get_context(self, context, field, kwargs):
         context.update(kwargs)
         context['field'] = field
         return context
