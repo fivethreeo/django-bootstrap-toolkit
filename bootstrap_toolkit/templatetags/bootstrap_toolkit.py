@@ -325,7 +325,7 @@ def bootstrap_messages(context, *args, **kwargs):
 
 
 @register.inclusion_tag("bootstrap_toolkit/form.html", takes_context=True)
-def bootstrap_form(form, **kwargs):
+def bootstrap_form(context, form, **kwargs):
     """
     Render a form
     """
@@ -337,7 +337,7 @@ def bootstrap_form(form, **kwargs):
 
 
 @register.inclusion_tag("bootstrap_toolkit/formset.html", takes_context=True)
-def bootstrap_formset(formset, **kwargs):
+def bootstrap_formset(context, formset, **kwargs):
     """
     Render a formset
     """
@@ -349,7 +349,7 @@ def bootstrap_formset(formset, **kwargs):
 
 
 @register.inclusion_tag("bootstrap_toolkit/field.html", takes_context=True)
-def bootstrap_field(field, **kwargs):
+def bootstrap_field(context, field, **kwargs):
     """
     Render a field
     """
