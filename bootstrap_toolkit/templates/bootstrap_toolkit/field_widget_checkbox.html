@@ -5,6 +5,6 @@
         <input type="checkbox" id="{{ field.auto_id }}" name="{{ field.html_name }}"
             {% if field.value %}checked{% endif %}
             {{ field.field.widget.attrs|html_attrs }}>
-        {{ field.label }}
+        {% if layout != "horizontal" and layout != "vertical" %}{{ field.label }}{% endif %}
     </label>
 </div>
